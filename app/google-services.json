@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "813350540252",
+    "firebase_url": "https://androidconversioncalc.firebaseio.com",
+    "project_id": "androidconversioncalc",
+    "storage_bucket": "androidconversioncalc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:813350540252:android:931989189766c1e418b519",
+        "android_client_info": {
+          "package_name": "edu.gvsu.cis.convcalc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "813350540252-jshbdj37trq3ip42h23la5eugou0cnqp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkKOb6SII1fjJjqrDnNawp9xafxOlCa9s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "813350540252-jshbdj37trq3ip42h23la5eugou0cnqp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
