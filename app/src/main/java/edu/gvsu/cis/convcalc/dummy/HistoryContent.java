@@ -1,11 +1,7 @@
 package edu.gvsu.cis.convcalc.dummy;
 
-import org.joda.time.DateTime;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Helper class for providing sample content for user interfaces created by
@@ -23,25 +19,33 @@ public class HistoryContent {
         ITEMS.add(item);
     }
 
+    /*
     static {
         DateTime now = DateTime.now();
-        addItem(new HistoryItem(2.0, 1.829, "Length", "Yards", "Meters", now.minusDays(1)));
-        addItem(new HistoryItem(1.0, 3.785, "Volume", "Gallons", "Liters", now.minusDays(1)));
-        addItem(new HistoryItem(2.0, 1.829, "Length", "Yards", "Meters", now.plusDays(1)));
-        addItem(new HistoryItem(1.0, 3.785, "Volume", "Gallons", "Liters", now.plusDays(1)));
+        addItem(new HistoryItem(2.0, 1.829, "Length", "Yards", "Meters", now.minusDays(1).toString()));
+        addItem(new HistoryItem(1.0, 3.785, "Volume", "Gallons", "Liters", now.minusDays(1).toString()));
+        addItem(new HistoryItem(2.0, 1.829, "Length", "Yards", "Meters", now.plusDays(1).toString()));
+        addItem(new HistoryItem(1.0, 3.785, "Volume", "Gallons", "Liters", now.plusDays(1).toString()));
     }
+     */
+
 
     public static class HistoryItem {
-        public final Double fromVal;
-        public final Double toVal;
-        public final String mode;
-        public final String fromUnits;
-        public final String toUnits;
+        public Double fromVal;
+        public Double toVal;
+        public String mode;
+        public String fromUnits;
+        public String toUnits;
 
-        public final DateTime timestamp;
+        public String timestamp;
+        public String _key;
+
+        public HistoryItem(){
+
+        }
 
         public HistoryItem(Double fromVal, Double toVal, String mode,
-                           String fromUnits, String toUnits, DateTime timestamp) {
+                           String fromUnits, String toUnits, String timestamp) {
             this.fromVal = fromVal;
             this.toVal = toVal;
             this.mode = mode;
