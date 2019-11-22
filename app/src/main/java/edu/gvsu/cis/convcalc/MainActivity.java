@@ -1,8 +1,12 @@
 package edu.gvsu.cis.convcalc;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,6 +14,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -28,6 +33,10 @@ import java.util.List;
 import edu.gvsu.cis.convcalc.UnitsConverter.LengthUnits;
 import edu.gvsu.cis.convcalc.UnitsConverter.VolumeUnits;
 import edu.gvsu.cis.convcalc.dummy.HistoryContent;
+import edu.gvsu.cis.convcalc.webservice.WeatherService;
+
+import static edu.gvsu.cis.convcalc.webservice.WeatherService.BROADCAST_WEATHER;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,6 +58,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView fromUnits;
     private TextView title;
 
+    private ImageView weatherIcon = null;
+    private TextView current = null;
+    private TextView temperature = null;
+
     DatabaseReference topRef;
     public static List<HistoryContent.HistoryItem> allHistory;
 
@@ -66,6 +79,10 @@ public class MainActivity extends AppCompatActivity {
 
         fromUnits = findViewById(R.id.fromUnits);
         toUnits = findViewById(R.id.toUnits);
+
+        weatherIcon = this.findViewById(R.id.weatherIcon);
+        current  = this.findViewById(R.id.current);
+        temperature = this.findViewById(R.id.temperature);
 
         allHistory = new ArrayList<HistoryContent.HistoryItem>();
 
@@ -114,10 +131,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//
     }
 
+    private BroadcastReceiver weatherReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            double temp = bundle.getDouble("TEMPERATURE");
+            String summary = bundle.getString("SUMMARY");
+            String icon = bundle.getString("ICON").replaceAll("-", "_");
+            String key = bundle.getString("KEY");
+            int resID = getResources().getIdentifier(icon , "drawable", getPackageName());
+            //setWeatherViews(View.VISIBLE);
+            if (key.equals("p1"))  {
+                current.setText(summary);
+                temperature.setText(Double.toString(temp));
+                weatherIcon.setImageResource(resID);
+            }
+        }
+    };
+
     private void doConversion() {
+        WeatherService.startGetWeather(this, "42.963686", "-85.888595", "p1");
+
         EditText dest = null;
         String val = "";
         String fromVal = fromField.getText().toString();
@@ -239,12 +275,18 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         topRef = FirebaseDatabase.getInstance().getReference("history");
         topRef.addChildEventListener (chEvListener);
+
+        IntentFilter weatherFilter = new IntentFilter(BROADCAST_WEATHER);
+        LocalBroadcastManager.getInstance(this).registerReceiver(weatherReceiver, weatherFilter);
     }
 
     @Override
     public void onPause(){
         super.onPause();
         topRef.removeEventListener(chEvListener);
+
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(weatherReceiver);
+
     }
 
     private ChildEventListener chEvListener = new ChildEventListener() {
